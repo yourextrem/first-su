@@ -36,9 +36,8 @@ export class RPGScene extends Scene {
             // Create layers
             const baseLayer = map.createLayer('Rodeo', tileset, 0, 0);
             const collisionLayer = map.createLayer('collision', tileset, 0, 0);
-            const treeTopLayer = map.createLayer('Toptree', tileset, 0, 0);
 
-            if (!baseLayer || !collisionLayer || !treeTopLayer) {
+            if (!baseLayer || !collisionLayer) {
                 throw new Error('Failed to create map layers');
             }
 
@@ -49,17 +48,20 @@ export class RPGScene extends Scene {
             // Set depth
             baseLayer.setDepth(0);
             
-            // Create player
-            this.player = new Player(this, 400, 300);
+            // Create player in the middle of the map
+            const mapWidth = map.widthInPixels;
+            const mapHeight = map.heightInPixels;
+            this.player = new Player(this, mapWidth / 2, mapHeight / 2);
             
             // Set player depth
             this.player.getSprite().setDepth(1);
-            
-            // Set tree top layer depth
-            treeTopLayer.setDepth(2);
 
             // Add collision between player and collision layer
             this.physics.add.collider(this.player.getSprite(), collisionLayer);
+
+            // Set camera to follow player
+            this.cameras.main.startFollow(this.player.getSprite());
+            this.cameras.main.setZoom(2);
 
             // Log success
             console.log('Scene created successfully');
