@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    reactStrictMode: false, // Disable strict mode for Phaser
+    reactStrictMode: false,
     webpack: (config) => {
         config.module.rules.push({
             test: /\.(png|jpg|gif)$/i,
@@ -8,15 +8,16 @@ const nextConfig = {
         });
         return config;
     },
-    // Enable static exports
-    output: 'export',
-    // Disable image optimization
     images: {
         unoptimized: true
     },
+    // Disable trailingSlash
+    trailingSlash: false,
+    // Enable static exports
+    output: 'standalone',
     // Disable server components
     experimental: {
-        appDir: true
+        serverActions: false
     }
 };
 
