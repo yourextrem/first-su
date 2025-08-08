@@ -7,30 +7,36 @@ import { RPGScene } from '@/lib/RPGScene';
 
 export default function GameComponent() {
     const gameRef = useRef<Game | null>(null);
-    const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (typeof window !== 'undefined' && containerRef.current && !gameRef.current) {
-            const config = {
-                ...gameConfig,
-                scene: RPGScene,
-                parent: containerRef.current
-            };
+        try {
+            if (typeof window !== 'undefined' && !gameRef.current) {
+                const config = {
+                    ...gameConfig,
+                    scene: RPGScene
+                };
 
-            gameRef.current = new Game(config);
+                const game = new Game(config);
+                gameRef.current = game;
 
-            return () => {
-                if (gameRef.current) {
-                    gameRef.current.destroy(true);
-                    gameRef.current = null;
-                }
-            };
+                // Log untuk debugging
+                console.log('Game instance created:', game);
+            }
+        } catch (error) {
+            console.error('Error creating game:', error);
         }
+
+        return () => {
+            if (gameRef.current) {
+                gameRef.current.destroy(true);
+                gameRef.current = null;
+            }
+        };
     }, []);
 
     return (
-        <div className="w-full min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4">
-            <div ref={containerRef} className="border-4 border-gray-700 rounded-lg overflow-hidden shadow-lg" />
+        <div className="w-full h-full flex flex-col items-center justify-center">
+            <div id="game-container" className="w-[800px] h-[600px] border-4 border-gray-700 rounded-lg overflow-hidden shadow-lg" />
             <div className="mt-4 text-white text-center">
                 <h2 className="text-xl font-bold mb-2">Game Controls</h2>
                 <div className="grid grid-cols-2 gap-4 text-sm">
