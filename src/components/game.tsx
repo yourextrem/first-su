@@ -10,34 +10,52 @@ export default function GameComponent() {
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const initGame = () => {
+        const initGame = async () => {
             try {
                 if (typeof window !== 'undefined' && !gameRef.current && containerRef.current) {
-                    // Make sure Phaser is loaded
+                    // Wait for Phaser to be available
                     if (typeof window.Phaser === 'undefined') {
-                        console.warn('Phaser is not loaded yet, waiting...');
-                        setTimeout(initGame, 100);
+                        console.log('Waiting for Phaser to load...');
                         return;
                     }
 
+                    console.log('Initializing game...');
                     const config = {
                         ...gameConfig,
                         scene: RPGScene,
-                        parent: containerRef.current
+                        parent: containerRef.current,
+                        // Ensure canvas is created
+                        canvas: document.createElement('canvas'),
+                        // Add debug info
+                        physics: {
+                            default: 'arcade',
+                            arcade: {
+                                debug: true,
+                                gravity: { y: 0 }
+                            }
+                        }
                     };
 
-                    console.log('Creating game with config:', config);
                     gameRef.current = new Game(config);
+                    console.log('Game initialized successfully');
                 }
             } catch (error) {
                 console.error('Error initializing game:', error);
             }
         };
 
-        // Start initialization
+        // Try to initialize game
         initGame();
 
+        // Retry every 100ms if Phaser isn't loaded yet
+        const interval = setInterval(() => {
+            if (!gameRef.current) {
+                initGame();
+            }
+        }, 100);
+
         return () => {
+            clearInterval(interval);
             if (gameRef.current) {
                 gameRef.current.destroy(true);
                 gameRef.current = null;
@@ -49,7 +67,7 @@ export default function GameComponent() {
         <div className="w-full h-full flex flex-col items-center justify-center">
             <div 
                 ref={containerRef}
-                className="w-[800px] h-[600px] border-4 border-gray-700 rounded-lg overflow-hidden shadow-lg"
+                className="w-[800px] h-[600px] border-4 border-gray-700 rounded-lg overflow-hidden shadow-lg bg-gray-800"
             />
             <div className="mt-4 text-white text-center">
                 <h2 className="text-xl font-bold mb-2">Game Controls</h2>

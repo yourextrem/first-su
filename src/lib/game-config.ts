@@ -5,22 +5,28 @@ export const gameConfig: Types.Core.GameConfig = {
     backgroundColor: '#2d2d2d',
     scale: {
         mode: Scale.FIT,
-        parent: 'game-container',
         autoCenter: Scale.CENTER_BOTH,
         width: 800,
-        height: 600
+        height: 600,
+        min: {
+            width: 800,
+            height: 600
+        }
     },
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 0 },
-            debug: false
+            debug: true,
+            gravity: { y: 0 }
         }
     },
     pixelArt: true,
     roundPixels: true,
-    render: {
-        antialias: false,
-        pixelArt: true
+    antialias: false,
+    // Add more verbose logging
+    banner: {
+        hidePhaser: false,
+        text: '#ffffff',
+        background: ['#2d2d2d']
     }
 };

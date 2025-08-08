@@ -17,7 +17,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js" defer />
+        <script 
+          src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js" 
+          async={false}
+          defer={false}
+          strategy="beforeInteractive"
+        />
       </head>
       <body className={inter.className}>
         {children}
