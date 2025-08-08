@@ -48,10 +48,8 @@ export class Player {
         };
 
         // Set up character physics
-        if (this.sprite.body) {
-            this.sprite.body.setCollideWorldBounds(true);
-            this.sprite.body.setSize(35, 35);
-        }
+        this.sprite.setCollideWorldBounds(true);
+        this.sprite.body?.setSize(35, 35);
 
         // Create animations
         this.createAnimations();
