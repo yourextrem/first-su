@@ -1,28 +1,23 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    reactStrictMode: true,
-    // Asset prefix for production
-    assetPrefix: process.env.NODE_ENV === 'production' ? '/' : '',
-    // Webpack config for Phaser
+    reactStrictMode: false, // Disable strict mode for Phaser
     webpack: (config) => {
-        config.externals = [...(config.externals || []), { canvas: 'canvas' }];
+        config.module.rules.push({
+            test: /\.(png|jpg|gif)$/i,
+            type: 'asset/resource'
+        });
         return config;
     },
-    // Image optimization settings
+    // Enable static exports
+    output: 'export',
+    // Disable image optimization
     images: {
-        unoptimized: true // For Phaser sprite sheets
+        unoptimized: true
     },
-    // CORS headers
-    async headers() {
-        return [
-            {
-                source: '/:path*',
-                headers: [
-                    { key: 'Access-Control-Allow-Origin', value: '*' }
-                ],
-            },
-        ]
-    },
+    // Disable server components
+    experimental: {
+        appDir: true
+    }
 };
 
 export default nextConfig;
