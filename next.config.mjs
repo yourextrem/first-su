@@ -2,27 +2,36 @@
 const nextConfig = {
     reactStrictMode: false,
     webpack: (config) => {
-        // Konfigurasi untuk asset game
+        // Configure webpack to handle game assets
         config.module.rules.push({
             test: /\.(png|jpg|gif|json)$/i,
             type: 'asset/resource'
         });
         return config;
     },
-    // Konfigurasi untuk production
-    distDir: '.next',
-    // Disable image optimization
+    // Configure output for Vercel
+    output: 'standalone',
+    // Disable image optimization for game assets
     images: {
         unoptimized: true
     },
-    // Asset prefix untuk production
-    assetPrefix: process.env.NODE_ENV === 'production' ? 'https://first-su-pilek.vercel.app' : '',
-    // Konfigurasi untuk static files
+    // Configure base path for assets
     basePath: '',
-    // Output sebagai standalone
-    output: 'standalone',
     // Disable powered by header
-    poweredByHeader: false
-};
+    poweredByHeader: false,
+    // Enable static exports
+    distDir: '.next',
+    // Configure headers for CORS
+    async headers() {
+        return [
+            {
+                source: '/:path*',
+                headers: [
+                    { key: 'Access-Control-Allow-Origin', value: '*' }
+                ]
+            }
+        ];
+    }
+}
 
 export default nextConfig;
