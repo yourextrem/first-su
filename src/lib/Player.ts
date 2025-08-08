@@ -31,14 +31,20 @@ export class Player {
         // Perkecil ukuran sprite
         this.sprite.setScale(0.7);
 
-        // Setup WASD controls
+        // Setup WASD controls with proper type checking
+        if (!scene.input?.keyboard) {
+            throw new Error('Keyboard input is not available');
+        }
+
+        const keyboard = scene.input.keyboard;
+        
         this.cursors = {
-            up: scene.input.keyboard.addKey('W'),
-            down: scene.input.keyboard.addKey('S'),
-            left: scene.input.keyboard.addKey('A'),
-            right: scene.input.keyboard.addKey('D'),
-            space: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
-            shift: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT)
+            up: keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
+            down: keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
+            left: keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+            right: keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
+            space: keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
+            shift: keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT)
         };
 
         // Set up character physics
@@ -119,9 +125,6 @@ export class Player {
             frameRate: 10,
             repeat: 0
         });
-
-        // Log untuk debugging
-        console.log('Available animations:', this.scene.anims.anims.entries);
     }
 
     update() {
